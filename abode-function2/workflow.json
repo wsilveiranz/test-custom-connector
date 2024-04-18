@@ -1,0 +1,51 @@
+{
+  "kind": "Stateful",
+  "definition": {
+    "metadata": {
+      "ExportMetadata": {
+        "ExportCorrelationId": "c27bcae6-8250-40d4-b8a0-5e859024dc49",
+        "ExportDate": "2024-02-22T20:29:10"
+      }
+    },
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Http",
+        "inputs": {
+          "schema": {}
+        }
+      }
+    },
+    "actions": {
+      "HttpTrigger1": {
+        "runAfter": {},
+        "trackedProperties": {
+          "a": "b"
+        },
+        "type": "Function",
+        "inputs": {
+          "function": {
+            "connectionName": "HttpTrigger1-connection-1"
+          },
+          "method": "POST"
+        }
+      },
+      "Response": {
+        "runAfter": {
+          "HttpTrigger1": [
+            "Succeeded"
+          ]
+        },
+        "type": "Response",
+        "kind": "Http",
+        "inputs": {
+          "body": "@{body('HttpTrigger1')}@{outputs('HttpTrigger1')['headers']}@{outputs('HttpTrigger1')['statusCode']}",
+          "statusCode": 200
+        }
+      }
+    },
+    "outputs": {}
+  }
+}

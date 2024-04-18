@@ -1,0 +1,18 @@
+{
+  "HttpTrigger1-connection-1-triggerUrl": {
+    "type": "String",
+    "value": "Enter the exported function's trigger URL. To find this URL, go to your function app resource in Azure. For more information, review https://aka.ms/LogicAppMigration."
+  },
+  "office365-2-std-RuntimeUrl": {
+    "type": "String",
+    "value": ""
+  },
+  "office365-2-std-Auth": {
+    "type": "Object",
+    "value": {
+      "scheme": "Key",
+      "parameter": "@appsetting('office365-2-std-RawAuthKey')",
+      "type": "Raw"
+    }
+  }
+}

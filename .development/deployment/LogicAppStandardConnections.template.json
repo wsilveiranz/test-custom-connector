@@ -1,0 +1,74 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "String"
+    },
+    "name": {
+      "defaultValue": "",
+      "type": "String",
+      "metadata": {
+        "description": "The name for the target Standard logic app resource that exists in the same subscription and resource group where the connections are being deployed. Set this parameter only when you want the deployment to create access policies for each connection that allow providing access to the target logic app by using a managed identity."
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2016-06-01",
+      "name": "office365-2-std",
+      "location": "[parameters('location')]",
+      "kind": "V2",
+      "type": "Microsoft.Web/connections",
+      "tags": {
+        "LogicAppsExportCorrelationId": "c27bcae6-8250-40d4-b8a0-5e859024dc49"
+      },
+      "resources": [
+        {
+          "condition": "[if(empty(parameters('name')), false(), true())]",
+          "apiVersion": "2016-06-01",
+          "name": "office365-2-std-b2293ea4-d071-4fb2-89e5-7a311e3e94b4",
+          "location": "[parameters('location')]",
+          "type": "accessPolicies",
+          "dependsOn": [
+            "Microsoft.Web/connections/office365-2-std"
+          ],
+          "properties": {
+            "principal": {
+              "type": "ActiveDirectory",
+              "identity": {
+                "objectId": "[if(empty(parameters('name')), 'NoObjectId', reference(resourceId('Microsoft.Web/Sites', parameters('name')), '2019-08-01', 'Full').identity.principalId)]",
+                "tenantId": "[if(empty(parameters('name')), 'NoTenantId', reference(resourceId('Microsoft.Web/Sites', parameters('name')), '2019-08-01', 'Full').identity.tenantId)]"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "api": {
+          "displayName": "Office 365 Outlook",
+          "description": "Microsoft Office 365 is a cloud-based service that is designed to help meet your organization's needs for robust security, reliability, and user productivity.",
+          "iconUri": "https://connectoricons-df.azureedge.net/u/bhraguru/ShowTargetServiceErrorsInOffice365/1.0.1679.3643/office365/icon.png",
+          "brandColor": "#0078D4",
+          "category": "Standard",
+          "id": "[subscriptionresourceid('Microsoft.Web/locations/managedApis', parameters('location'), 'office365')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "connections": {
+      "type": "Object",
+      "value": {
+        "office365-2-std": {
+          "runtimeUrlParameterKey": "office365-2-std-RuntimeUrl",
+          "runtimeUrlParameterValue": "[reference('office365-2-std').connectionRuntimeUrl]",
+          "authKeyAppsettingKey": "office365-2-std-RawAuthKey",
+          "connectionId": "[resourceid('Microsoft.Web/connections', 'office365-2-std')]"
+        }
+      }
+    }
+  }
+}

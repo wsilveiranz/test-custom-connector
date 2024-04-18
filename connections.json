@@ -1,0 +1,50 @@
+{
+  "serviceProviderConnections": {
+    "AzureBlob": {
+      "parameterValues": {
+        "connectionString": "@appsetting('AzureBlob_connectionString')"
+      },
+      "parameterSetName": "connectionString",
+      "serviceProvider": {
+        "id": "/serviceProviders/AzureBlob"
+      },
+      "displayName": "mystor"
+    }
+  },
+  "managedApiConnections": {
+    "office365-2-std": {
+      "api": {
+        "id": "/subscriptions/@{appsetting('WORKFLOWS_SUBSCRIPTION_ID')}/providers/Microsoft.Web/locations/@{appsetting('WORKFLOWS_LOCATION_NAME')}/managedApis/office365"
+      },
+      "connection": {
+        "id": "/subscriptions/@{appsetting('WORKFLOWS_SUBSCRIPTION_ID')}/resourcegroups/@{appsetting('WORKFLOWS_RESOURCE_GROUP_NAME')}/providers/Microsoft.Web/connections/office365-2-std"
+      },
+      "authentication": "@parameters('office365-2-std-Auth')",
+      "connectionRuntimeUrl": "@parameters('office365-2-std-RuntimeUrl')"
+    }
+  },
+  "functionConnections": {
+    "HttpTrigger1-connection-1": {
+      "displayName": "HttpTrigger1-connection-1",
+      "Authentication": {
+        "name": "Code",
+        "value": "@appsetting('HttpTrigger1-connection-1-key')",
+        "type": "QueryString"
+      },
+      "Function": {
+        "name": "abodefunctionapp/HttpTrigger1",
+        "id": "/subscriptions/80d4fe69-c95b-4dd2-a938-9250f1c8ab03/resourceGroups/Abode_test/providers/Microsoft.Web/sites/abodefunctionapp/functions/HttpTrigger1",
+        "type": "Microsoft.Web/sites/functions"
+      },
+      "TriggerUrl": "@parameters('HttpTrigger1-connection-1-triggerUrl')"
+    }
+  },
+  "apiManagementConnections": {
+    "root-connection-1": {
+      "displayName": "root-connection-1",
+      "apiId": "",
+      "baseUrl": "",
+      "subscriptionKey": "@appsetting('root-connection-1-subscriptionKey')"
+    }
+  }
+}

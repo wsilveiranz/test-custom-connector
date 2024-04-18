@@ -1,0 +1,83 @@
+{
+  "kind": "Stateful",
+  "definition": {
+    "metadata": {
+      "ExportMetadata": {
+        "ExportCorrelationId": "c27bcae6-8250-40d4-b8a0-5e859024dc49",
+        "ExportDate": "2024-02-22T20:29:10"
+      }
+    },
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Http",
+        "inputs": {
+          "schema": {}
+        }
+      }
+    },
+    "actions": {
+      "Response": {
+        "runAfter": {
+          "Send_an_email_(V2)": [
+            "Succeeded"
+          ]
+        },
+        "type": "Response",
+        "kind": "Http",
+        "inputs": {
+          "statusCode": 200
+        }
+      },
+      "Send_an_email_(V2)": {
+        "runAfter": {
+          "abode-function2": [
+            "Succeeded"
+          ]
+        },
+        "type": "ApiConnection",
+        "inputs": {
+          "host": {
+            "connection": {
+              "name": null,
+              "referenceName": "office365-2-std"
+            }
+          },
+          "method": "post",
+          "body": {
+            "To": "absaafan@microsoft.com",
+            "Subject": "hi",
+            "Body": "<p>hi</p>",
+            "Importance": "Normal"
+          },
+          "path": "/v2/Mail"
+        }
+      },
+      "abode-function2": {
+        "runAfter": {
+          "Execute_JavaScript_Code": [
+            "Succeeded"
+          ]
+        },
+        "type": "Workflow",
+        "inputs": {
+          "host": {
+            "workflow": {
+              "id": "abode-function2"
+            }
+          }
+        }
+      },
+      "Execute_JavaScript_Code": {
+        "runAfter": {},
+        "type": "JavaScriptCode",
+        "inputs": {
+          "code": "var text = \"Hello world from \" + workflowContext.workflow.name;\r\n\r\nreturn {};"
+        }
+      }
+    },
+    "outputs": {}
+  }
+}
